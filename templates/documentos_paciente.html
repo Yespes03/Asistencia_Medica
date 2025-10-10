@@ -130,11 +130,12 @@
       margin-left: 22px;
     }
 
+    /* ➡️ CAMBIO CLAVE AQUÍ: Reducir el padding horizontal */
     .btn {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 8px 14px;
+      padding: 8px 10px; /* Reducido de 14px a 10px */
       border-radius: 8px;
       font-size: 0.9em;
       text-decoration: none;
@@ -144,6 +145,19 @@
     .btn-view:hover { background: var(--primary-hover); }
     .btn-download { background: var(--success-color); color: white; margin-left: 6px; }
     .btn-download:hover { background: #218838; }
+
+    .btn-download:hover { background: #218838; }
+
+   
+    .btn-delete {
+      background: #dc3545; 
+      color: white;
+      margin-left: 6px;
+      padding: 8px 10px; /* Mantener padding ajustado */
+    }
+    .btn-delete:hover {
+      background: #c82333;
+    }
 
     .no-data {
       text-align: center;
@@ -225,7 +239,6 @@
     <h1><i class="fas fa-file-medical"></i> Documentos de Pacientes</h1>
   </header>
 
-<!-- 🔹 Mensajes flash -->
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
     <div style="max-width:90%; margin:20px auto;">
@@ -239,7 +252,6 @@
 {% endwith %}
 
   <div class="main-container">
-    <!-- Formulario de búsqueda -->
     <div class="filter-box">
       <h2>🔎 Busca tu paciente</h2>
       <form method="get" action="/documentos_paciente">
@@ -257,13 +269,11 @@
 
     {% if paciente %}
 
-    <!-- Botón para subir documento independiente -->
-  <div style="text-align: right; margin-bottom: 15px;">
+    <div style="text-align: right; margin-bottom: 15px;">
     <a href="{{ url_for('subir_documento_medico') }}?usuario_id={{ paciente.id }}" class="btn btn-view" style="padding:10px 16px;">
       <i class="fas fa-cloud-upload-alt"></i> Subir Documento
     </a>
   </div>
-      <!-- Documentos ligados a citas -->
       <div class="section">
         <div class="section-header">
           <h2>
@@ -309,7 +319,13 @@
                   <td data-label="Acciones">
                     <a href="{{ url_for('uploaded_file', filename=doc.archivo) }}" target="_blank" class="btn btn-view"><i class="fas fa-eye"></i> Ver</a>
                     <a href="{{ url_for('uploaded_file', filename=doc.archivo) }}" download class="btn btn-download"><i class="fas fa-download"></i> Descargar</a>
-                  </td>
+                    
+                    <form action="{{ url_for('eliminar_documento', id=doc.id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('¿Estás seguro de que quieres eliminar el documento {{ doc.nombre }}? Esta acción es irreversible.');">
+                        <button type="submit" class="btn btn-delete" title="Eliminar Documento">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </form>
+                    </td>
                 </tr>
                 {% endfor %}
               {% else %}
@@ -320,7 +336,6 @@
         </div>
       </div>
 
-      <!-- Documentos independientes -->
       <div class="section">
         <div class="section-header">
           <h2><i class="fas fa-folder"></i> Documentos independientes</h2>
@@ -359,7 +374,13 @@
                   <td data-label="Acciones">
                     <a href="{{ url_for('uploaded_file', filename=doc.archivo) }}" target="_blank" class="btn btn-view"><i class="fas fa-eye"></i> Ver</a>
                     <a href="{{ url_for('uploaded_file', filename=doc.archivo) }}" download class="btn btn-download"><i class="fas fa-download"></i> Descargar</a>
-                  </td>
+
+                    <form action="{{ url_for('eliminar_documento', id=doc.id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('¿Estás seguro de que quieres eliminar el documento {{ doc.nombre }}? Esta acción es irreversible.');">
+                        <button type="submit" class="btn btn-delete" title="Eliminar Documento">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </form>
+                    </td>
                 </tr>
                 {% endfor %}
               {% else %}
@@ -373,8 +394,44 @@
     {% endif %}
 
     
-    <!-- Botón volver -->
+   
     <a href="{{ url_for('panel_medico') }}" class="btn-back"><i class="fas fa-arrow-left"></i> Volver al panel</a>
   </div>
+
+<script>
+    function autoDismissAlerts() {
+        
+        const alerts = document.querySelectorAll('.alert'); 
+
+        if (alerts.length > 0) {
+            const delayInMilliseconds = 4000; 
+
+            alerts.forEach(alertElement => {
+                
+                
+                alertElement.style.transition = 'opacity 0.5s ease-in-out, margin-top 0.5s ease-in-out, margin-bottom 0.5s ease-in-out, padding 0.5s ease-in-out, height 0.5s ease-in-out';
+                alertElement.style.overflow = 'hidden';
+
+                setTimeout(() => {
+                    
+                    alertElement.style.opacity = '0';
+                    alertElement.style.height = '0px'; 
+                    alertElement.style.padding = '0px';
+                    alertElement.style.marginTop = '0px';
+                    alertElement.style.marginBottom = '0px';
+
+                    
+                    setTimeout(() => {
+                        alertElement.remove();
+                    }, 500); 
+                }, delayInMilliseconds);
+            });
+        }
+    }
+
+    
+    window.onload = autoDismissAlerts;
+</script>
+  
 </body>
 </html>

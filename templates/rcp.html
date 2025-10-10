@@ -156,7 +156,7 @@
             }
         }
         
-        /* New CSS for Bootstrap-like components */
+
         .main-container {
             max-width: 1100px;
             margin: 40px auto;
@@ -182,12 +182,12 @@
             justify-content: center;
         }
         
-        /* NEW: This media query specifically targets small screens to make the cards stack */
+        
         @media (max-width: 767px) {
             .col-md-3 {
                 flex: 0 0 100%;
                 max-width: 100%;
-                margin-bottom: 20px; /* Add some space between stacked cards */
+                margin-bottom: 20px; 
             }
         }
 
@@ -281,6 +281,16 @@
             margin: 0;
         }
 
+        
+        @media (max-width: 600px) {
+             .section-title {
+                font-size: 22px; 
+                padding: 0 10px; /* Asegura un poco de espacio a los lados */
+                word-wrap: break-word; /* Permite que palabras largas se corten para ajustarse */
+            }
+        }
+        /* fin de Corrección para títulos en móviles */
+
         .card {
             background: #fff;
             height: 250px;
@@ -292,13 +302,13 @@
             min-height: 220px;
             border: 2px solid var(--accent-gold);
             
-            /* Estilos para la onda */
+            
             position: relative;
             overflow: hidden;
-            padding-bottom: 60px; /* Para hacer espacio a la onda */
+            padding-bottom: 60px; 
         }
         
-        /* Estilos de la onda */
+        
         .card-wave {
             position: absolute;
             bottom: 0;
@@ -386,19 +396,19 @@
             margin-right: 15px;
             border: 3px solid var(--primary-blue);
         }
-        /* Icon styling for new sections */
+        
         .info-card .card-icon {
             font-size: 3rem;
             color: var(--primary-blue);
-            width: 100px; /* Adjust size as needed */
+            width: 100px; 
             text-align: center;
             margin-right: 20px;
         }
 
-        /* New class for blue text to replace bold */
+        
         .text-blue {
             color: var(--primary-blue);
-            font-weight: 600; /* Keeping font weight for emphasis */
+            font-weight: 600; 
         }
 
 
@@ -424,6 +434,8 @@
             justify-content: space-between;
             align-items: center;
             transition: background 0.3s;
+            white-space: normal; 
+            text-align: left;
         }
 
         .accordion-header:hover {
@@ -438,20 +450,20 @@
             background: #fff;
         }
         
-        /* New CSS rules for the accordion content and paragraphs */
+        
         .accordion-item.active .accordion-content {
-            max-height: 250px;
-            /* Adjust padding for top and bottom spacing */
+            max-height: 1000px; 
             padding: 15px;
         }
+        
 
         .accordion-content p {
-            /* Resetting default margins and adding custom ones */
+
             margin-top: 0;
             margin-bottom: 15px; 
             padding: 0;
         }
-        /* End of new rules */
+
 
         .container {
             width: 100%;
@@ -495,33 +507,99 @@
             font-weight: 600 !important;
         }
 
-        /* Custom styles for Heimlich carousel images */
+        
         #carruselHeimlich .rounded-circle {
-            margin-top: 20px; /* Adjust this value to move the image down */
+            margin-top: 20px;
         }
 
-        /* Custom style for the text box below Heimlich images */
+        
         .text-description-box {
-            background-color: #f7f9fc; /* Light background color */
+            background-color: #f7f9fc; 
             padding: 10px 20px;
             border-radius: 8px;
-            margin: 15px auto 0; /* Center and add top margin */
-            max-width: 300px; /* Adjust width as needed */
+            margin: 15px auto 0; 
+            max-width: 300px; 
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
             color: var(--primary-blue);
             font-weight: 600;
             font-size: 1rem;
         }
 
-        /* New CSS for the text container of Heimlich description */
+        
         .heimlich-description-container {
-            max-width: 800px; /* O el ancho que desees, por ejemplo 900px */
+            max-width: 800px; 
             margin: 0 auto 20px;
             padding: 20px;
             border-radius: 12px;
             border-left: 5px solid var(--primary-blue);
             background: #f8f9fa;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 25px;
+            max-width: 700px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            text-align: left;
+            line-height: 1.6;
+            overflow-y: auto;
+            max-height: 80vh;
+            border-top: 8px solid var(--accent-gold);
+        }
+
+        .modal-content h2 {
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .modal-buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .modal-buttons button {
+            margin: 0 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s ease;
+        }
+
+        .btn-aceptar {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+
+        .btn-aceptar:hover {
+            background-color: #0366c2;
+        }
+
+        .btn-cancelar {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .btn-cancelar:hover {
+            background-color: #c0392b;
         }
     </style>
 <link rel="icon" type="image/png" href="{{ url_for('static', filename='zz.png') }}">
@@ -924,9 +1002,59 @@
     
   </div>
 
+<div id="disclaimer-modal" class="modal">
+  <div class="modal-content">
+    
+    <h2>⚠️ Descargo de Responsabilidad Médico y de RCP</h2>
+    
+    <p><strong>Importante:</strong> La información proporcionada en esta página web sobre Reanimación Cardiopulmonar (RCP), primeros auxilios, consejos y temas de salud general tiene únicamente fines informativos y educativos.</p>
+    
+    <p><strong>No Sustituye el Asesoramiento Médico Profesional:</strong> El contenido de esta web no debe ser considerado ni utilizado como un sustituto del diagnóstico, tratamiento, asesoramiento o la atención médica profesional por parte de un médico, enfermero o cualquier otro profesional de la salud calificado. Siempre consulta a un profesional de la salud calificado si tienes alguna pregunta sobre una condición médica o antes de comenzar cualquier nuevo tratamiento de salud.</p>
+    
+    <p><strong>Actúa Bajo tu Propia Responsabilidad:</strong> La aplicación de las técnicas de RCP y primeros auxilios descritas aquí se realiza bajo la exclusiva responsabilidad del usuario. No nos hacemos responsables de las lesiones, daños o resultados adversos que puedan surgir de la interpretación o aplicación de la información presentada.</p>
+    
+    <p><strong>Capacitación Formal:</strong> Recomendamos encarecidamente que, para estar debidamente preparado, obtengas una certificación formal y práctica de RCP y primeros auxilios a través de una organización reconocida. Las habilidades de salvamento requieren entrenamiento práctico.</p>
+    
+    <p><strong>En Caso de Emergencia:</strong> Si crees que tú o alguien más está experimentando una emergencia médica, llama inmediatamente al número local de emergencias (ej: 112, 911, etc.) o acude al centro de atención médica más cercano. Nunca ignores el consejo médico profesional ni demores la búsqueda de tratamiento debido a algo que hayas leído en esta web.</p>
+
+    <hr>
+    
+    <p><strong>Declaración de Consentimiento Obligatorio:</strong></p>
+    <p>Al hacer clic en <strong>"Aceptar"</strong>, usted confirma que ha leído, entendido y aceptado este Descargo de Responsabilidad, así como los <a href="/terminos-y-condiciones" target="_blank">Términos y Condiciones de Uso</a> y la <a href="/politica-de-privacidad" target="_blank">Política de Privacidad</a> de este sitio web.</p>
+    
+    <p class="advertencia"><strong>Si no acepta estos términos, por favor haga clic en "Cancelar" y abandone esta sección de la web.</strong></p>
+    
+    <div class="modal-buttons">
+      <button id="aceptar-btn" class="btn-aceptar">Aceptar</button>
+      <button id="cancelar-btn" class="btn-cancelar">Cancelar</button>
+    </div>
+    
+  </div>
+</div>
 
   <script>
-    // JavaScript for carousel functionality
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (!sessionStorage.getItem("disclaimerAceptado")) {
+    const modal = document.getElementById("disclaimer-modal");
+    modal.style.display = "flex";
+
+    document.getElementById("aceptar-btn").addEventListener("click", () => {
+      sessionStorage.setItem("disclaimerAceptado", "true");
+      modal.style.display = "none";
+    });
+
+    document.getElementById("cancelar-btn").addEventListener("click", () => {
+      alert("Debes aceptar el descargo para acceder a esta información.");
+      window.location.href = "/"; // Redirige a la página principal
+    });
+  }
+});
+
+
+
+
+    // JavaScript carrusel
     document.addEventListener('DOMContentLoaded', () => {
         const carousels = document.querySelectorAll('.carousel');
         carousels.forEach(carousel => {
@@ -950,18 +1078,18 @@
                     activeIndex = (activeIndex - 1 + items.length) % items.length;
                     updateCarousel();
                 });
-                // Autoplay functionality: set an interval to advance slides
+                
                 let autoSlideInterval = setInterval(() => {
                     activeIndex = (activeIndex + 1) % items.length;
                     updateCarousel();
-                }, 5000); // Change slide every 5 seconds
+                }, 5000); 
 
-                // Pause autoplay when hovering over the carousel
+                
                 carousel.addEventListener('mouseenter', () => {
                     clearInterval(autoSlideInterval);
                 });
 
-                // Resume autoplay when not hovering
+                
                 carousel.addEventListener('mouseleave', () => {
                     autoSlideInterval = setInterval(() => {
                         activeIndex = (activeIndex + 1) % items.length;
@@ -979,10 +1107,17 @@
         });
     });
 
-    // JavaScript for accordion functionality
+    // JavaScript funcionalidad del acordeón
     const items = document.querySelectorAll('.accordion-item');
     items.forEach(item => {
         item.querySelector('.accordion-header').addEventListener('click', () => {
+            // Cierra todos los demás ítems
+            items.forEach(otherItem => {
+                if (otherItem !== item && otherItem.classList.contains('active')) {
+                    otherItem.classList.remove('active');
+                }
+            });
+            // Alterna el estado activo del ítem clickeado
             item.classList.toggle('active');
         });
     });

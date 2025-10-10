@@ -15,14 +15,14 @@
             margin: 0;
         }
 
-        /* --- CONTENEDOR PRINCIPAL: AUMENTADO EL ANCHO --- */
+        
         .login-container {
             background-color: #fff;
             padding: 0;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 500px; /* ANCHO AUMENTADO */
+            max-width: 500px; 
             text-align: center;
             overflow: hidden;
         }
@@ -30,7 +30,7 @@
         .header-bar {
             background-color: #3b82f6;
             color: #fff;
-            padding: 20px; /* PADDING AUMENTADO */
+            padding: 20px; 
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -39,47 +39,47 @@
         .header-bar .logo-container {
             display: flex;
             align-items: center;
-            gap: 15px; /* ESPACIO AUMENTADO */
+            gap: 15px; 
         }
         
         .header-bar .logo {
-            width: 50px; /* TAMAÑO DE LOGO AUMENTADO */
+            width: 50px; 
             height: auto;
         }
         
         .header-bar .title {
-            font-size: 22px; /* TAMAÑO DE FUENTE AUMENTADO */
+            font-size: 22px; 
             font-weight: bold;
             margin: 0;
         }
         
-        /* --- CONTENEDOR DEL FORMULARIO: PADDING AUMENTADO --- */
+
         .login-content {
-            padding: 50px; /* PADDING AUMENTADO */
+            padding: 50px; 
         }
 
         .login-header .main-title {
             color: #3b82f6;
-            margin: 0 0 20px; /* MARGEN AUMENTADO */
-            font-size: 28px; /* TAMAÑO DE FUENTE AUMENTADO */
+            margin: 0 0 20px; 
+            font-size: 28px; 
         }
 
         .login-form .input-group {
-            margin-bottom: 25px; /* MARGEN AUMENTADO */
+            margin-bottom: 25px; 
             text-align: left;
         }
         
         .login-form .input-group label {
             display: block;
-            margin-bottom: 10px; /* MARGEN AUMENTADO */
+            margin-bottom: 10px; 
             color: #333;
             font-weight: bold;
-            font-size: 16px; /* TAMAÑO DE FUENTE AUMENTADO */
+            font-size: 16px; 
         }
 
         .login-form .input-group .required-field {
             color: red;
-            font-size: 14px; /* TAMAÑO DE FUENTE AUMENTADO */
+            font-size: 14px; 
             margin-top: 5px;
         }
 
@@ -87,11 +87,11 @@
         .login-form .input-group input[type="text"],
         .login-form .input-group input[type="password"] {
             width: 100%;
-            padding: 15px; /* PADDING AUMENTADO */
+            padding: 15px; 
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
-            font-size: 18px; /* TAMAÑO DE FUENTE AUMENTADO */
+            font-size: 18px; 
         }
         
         .login-form .input-group select {
@@ -104,12 +104,12 @@
 
         .login-button {
             width: 100%;
-            padding: 15px; /* PADDING AUMENTADO */
+            padding: 15px; 
             background-color: #007bff;
             color: #fff;
             border: none;
             border-radius: 5px;
-            font-size: 18px; /* TAMAÑO DE FUENTE AUMENTADO */
+            font-size: 18px; 
             font-weight: bold;
             cursor: pointer;
             transition: background-color 0.3s ease;
@@ -123,7 +123,7 @@
         .additional-options {
             display: flex;
             justify-content: space-between;
-            font-size: 16px; /* TAMAÑO DE FUENTE AUMENTADO */
+            font-size: 16px; 
         }
 
         .additional-options a {
@@ -143,11 +143,32 @@
             font-weight: bold;
         }
 
-        .flash-message.error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
+
+        .flash-container {
+  margin-bottom: 15px;
+}
+
+.flash-message {
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  text-align: center;
+  transition: opacity 0.5s ease;
+}
+
+
+.flash-message.success {
+  background-color: #D1FAE5;
+  color: #065F46;
+}
+
+
+.flash-message.error {
+  background-color: #FEE2E2;
+  color: #991B1B;
+}
+
     </style>
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='zz.png') }}">
 </head>
@@ -166,7 +187,7 @@
             <h2 class="main-title">Iniciar sesión</h2>
         </div>
         
-        <!-- Bloque para mostrar mensajes flash del servidor -->
+        
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
@@ -176,6 +197,18 @@
                 {% endfor %}
             {% endif %}
         {% endwith %}
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-container">
+      {% for category, message in messages %}
+        <div class="flash-message {{ category }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
 
         <form class="login-form" method="post" action="/sesion">
             <div class="input-group">
@@ -211,12 +244,21 @@
             <button type="submit" class="login-button">Continuar</button>
 
             <div class="additional-options">
-                <a href="#">¿Olvidaste tu contraseña?</a>
+                <a href="/forgot_password">¿Olvidaste tu contraseña?</a>
                 <a href="/register">Regístrate</a>
             </div>
         </form>
     </div>
 </div>
+<script>
+  setTimeout(() => {
+    const messages = document.querySelectorAll('.flash-message');
+    messages.forEach(msg => {
+      msg.style.opacity = '0';
+      setTimeout(() => msg.remove(), 500); 
+    });
+  }, 3000); 
+</script>
 
 </body>
 </html>

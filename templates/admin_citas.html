@@ -261,7 +261,7 @@ tbody tr:hover {
     td {
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
+        align-items: flex-start; /* Esto alinea el contenido (form/div) del <td> a la izquierda */
         text-align: left;
         padding: 0.8rem 0;
         border: none;
@@ -275,8 +275,9 @@ tbody tr:hover {
         display: block;
     }
 
+    /* Se vuelve a la alineación a la izquierda por defecto */
     .actions-cell {
-        justify-content: flex-start;
+        justify-content: flex-start; /* Se vuelve a la izquierda */
         width: 100%;
         gap: 0.5rem;
     }
@@ -344,28 +345,25 @@ tbody tr:hover {
                         <td data-label="Especialidad">{{ c.especialidad }}</td>
                         <td data-label="Fecha">{{ c.fecha }}</td>
                         <td data-label="Hora">{{ c.hora }}</td>
-                        <td data-label="Estado">
-                          <form action="{{ url_for('admin_actualizar_estado', cita_id=c.id) }}" method="POST" style="display:flex; flex-direction:column; gap:0.4rem; align-items:center;">
-    <select name="estado" class="status-select">
-        <option value="Pendiente"  {% if c.estado == "Pendiente" %}selected{% endif %}>Pendiente</option>
-        <option value="Cancelada"  {% if c.estado == "Cancelada" %}selected{% endif %}>Cancelada</option>
-        <option value="No asistió" {% if c.estado == "No asistió" %}selected{% endif %}>No asistió</option>
-        <option value="Completada" {% if c.estado == "Completada" %}selected{% endif %}>Completada</option>
-    </select>
-    <button type="submit" class="btn" style="padding:0.4rem 1rem; font-size:0.85rem;">
-        <i class="fas fa-sync-alt"></i> Actualizar
-    </button>
-</form>
-
+                        
+                        <td data-label="Estado"> 
+                            <form action="{{ url_for('admin_actualizar_estado', cita_id=c.id) }}" method="POST" style="display:flex; flex-direction:column; gap:0.4rem;">
+                                <select name="estado" class="status-select">
+                                    <option value="Pendiente"  {% if c.estado == "Pendiente" %}selected{% endif %}>Pendiente</option>
+                                    <option value="Cancelada"  {% if c.estado == "Cancelada" %}selected{% endif %}>Cancelada</option>
+                                    <option value="No asistió" {% if c.estado == "No asistió" %}selected{% endif %}>No asistió</option>
+                                    <option value="Completada" {% if c.estado == "Completada" %}selected{% endif %}>Completada</option>
+                                </select>
+                                <button type="submit" class="btn" style="padding:0.4rem 1rem; font-size:0.85rem;">
+                                    <i class="fas fa-sync-alt"></i> Actualizar
+                                </button>
                             </form>
                         </td>
+                        
                         <td data-label="Acciones">
                             <div class="actions-cell">
                                 <a href="/admin/citas/cancelar/{{ c.id }}" class="btn">
                                     <i class="fas fa-times"></i> Cancelar
-                                </a>
-                                <a href="/admin/citas/bloquear/{{ c.id }}" class="btn">
-                                    <i class="fas fa-ban"></i> Bloquear
                                 </a>
                             </div>
                         </td>

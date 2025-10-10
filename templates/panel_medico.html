@@ -225,6 +225,26 @@
             .table-responsive { display: none; }
             .cita-container { display: flex; }
             .main-container { max-width: 95%; }
+            
+            /* --- Modificaciones Responsive para Botones de Navegación --- */
+            .section.actions-center {
+                flex-direction: column; /* Apila los elementos verticalmente */
+                gap: 15px !important; 
+                padding: 0 10px;
+            }
+
+            .btn-historial {
+                width: 100%; /* Ocupa todo el ancho */
+                max-width: 100%;
+                font-size: 1em; 
+                padding: 15px 10px; 
+                
+                min-height: 60px; 
+                display: flex;
+                align-items: center; 
+                justify-content: center; 
+            }
+            /* ---------------------------------------------------------- */
         }
         
         /* Muestra la tabla y oculta las tarjetas en desktop */
@@ -234,45 +254,45 @@
         }
 
         .btn-doc {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--primary-color);
-    color: white;
-    padding: 8px 12px;
-    border-radius: 6px;
-    font-size: 0.9em;
-    transition: all 0.3s ease;
-}
-.btn-doc:hover {
-    background: var(--primary-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-.flash-messages {
-  margin: 20px auto;
-  padding: 0;
-  max-width: 600px;
-}
-.flash-messages li {
-  list-style: none;
-  padding: 12px 15px;
-  border-radius: 6px;
-  margin-bottom: 10px;
-  font-size: 15px;
-  font-weight: bold;
-  text-align: center;
-}
-.flash-messages .success {
-  background: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
-}
-.flash-messages .error {
-  background: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
-}
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary-color);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+        .btn-doc:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .flash-messages {
+            margin: 20px auto;
+            padding: 0;
+            max-width: 600px;
+        }
+        .flash-messages li {
+            list-style: none;
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 15px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .flash-messages .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .flash-messages .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
     </style>
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='zz.png') }}">
 </head>
@@ -405,6 +425,15 @@
                             </form>
                         </span>
                     </div>
+                    <div class="cita-info">
+                        <span class="cita-label">Archivos:</span>
+                        <span class="cita-value">
+                            <a href="{{ url_for('subir_documento', cita_id=cita.id) }}" 
+                               class="btn-doc" title="Subir documento">
+                               <i class="fas fa-folder-plus"></i>
+                            </a>
+                        </span>
+                    </div>
                     {% if cita.tipo_cita == "Virtual" %}
                     <div class="cita-actions">
                         <a href="mailto:{{ cita.correo_paciente }}?subject=Cita Médica Virtual&body=Hola {{ cita.nombre_paciente }},%0D%0A%0D%0A Esta es la información para tu cita virtual.%0D%0A%0D%0AAtentamente,%0D%0ADr. {{ nombre_medico }}" class="btn btn-primary">
@@ -521,6 +550,15 @@
                                     <option value="Completada" {% if cita.estado == 'Completada' %}selected{% endif %}>Completada</option>
                                 </select>
                             </form>
+                        </span>
+                    </div>
+                    <div class="cita-info">
+                        <span class="cita-label">Archivos:</span>
+                        <span class="cita-value">
+                            <a href="{{ url_for('subir_documento', cita_id=cita.id) }}" 
+                               class="btn-doc" title="Subir documento">
+                               <i class="fas fa-folder-plus"></i> Subir
+                            </a>
                         </span>
                     </div>
                     {% if cita.tipo_cita == "Virtual" %}

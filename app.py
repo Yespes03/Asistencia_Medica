@@ -103,6 +103,52 @@ def sesion():
 
     return render_template("sesion.html")
 
+@app.route("/forgot_password", methods=["GET", "POST"])
+def forgot_password():
+    if request.method == "POST":
+        tipo_doc = request.form.get("document_type")
+        numero_doc = request.form.get("document_number")
+        nueva_contrasena = request.form.get("new_password")
+
+        # 🔹 Validación simple antes de consultar DB
+        if not tipo_doc or not numero_doc or not nueva_contrasena:
+            flash("Por favor completa todos los campos.", "error")
+            return redirect(url_for("forgot_password"))
+
+        try:
+            connection = get_connection()
+            with connection.cursor() as cursor:
+                # 🔹 Verificar si el usuario existe
+                cursor.execute(
+                    "SELECT id FROM usuarios WHERE tipo_documento = %s AND documento = %s",
+                    (tipo_doc, numero_doc)
+                )
+                user = cursor.fetchone()
+
+                if not user:
+                    flash("❌ No existe un usuario con ese documento.", "error")
+                    return redirect(url_for("forgot_password"))
+
+                # 🔹 Actualizar contraseña
+                cursor.execute(
+                    "UPDATE usuarios SET contrasena = %s WHERE tipo_documento = %s AND documento = %s",
+                    (nueva_contrasena, tipo_doc, numero_doc)
+                )
+                connection.commit()
+
+                flash("✅ Contraseña actualizada correctamente. ¡Ahora puedes iniciar sesión!", "success")
+                return redirect(url_for("sesion"))
+
+        except Exception as e:
+            print(f"❌ Error al restablecer contraseña: {e}")
+            flash("⚠️ Ocurrió un error al restablecer la contraseña. Intenta nuevamente.", "error")
+        finally:
+            if 'connection' in locals() and connection.open:
+                connection.close()
+
+    return render_template("forgot_password.html")
+
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -812,6 +858,13 @@ def documentos_paciente():
                 """, (tipo_documento, documento))
                 paciente = cursor.fetchone()
 
+                # ⚠️ AÑADIR ESTE BLOQUE DE CÓDIGO ⚠️
+                if not paciente:
+                    # 'error' es la categoría CSS que tienes definida
+                    flash(f"❌ Paciente con documento {tipo_documento} {documento} no encontrado.", "error")
+                    # No hace falta seguir buscando documentos, se puede cerrar la conexión y retornar
+
+
                 if paciente:
                     paciente_id = paciente["id"]
 
@@ -846,6 +899,63 @@ def documentos_paciente():
         documentos_citas=documentos_citas,
         documentos_independientes=documentos_independientes
     )
+
+
+import os
+from flask import request, redirect, url_for, flash, session
+# Asegúrate de importar 'session' si aún no lo has hecho.
+
+
+@app.route("/eliminar_documento/<int:id>", methods=["POST"])
+def eliminar_documento(id):
+    
+    # 🚨 IMPLEMENTACIÓN DE VERIFICACIÓN DE ROL 🚨
+    # Solo permite continuar si el usuario está logueado y su rol es 'medico' o 'admin'.
+    if "usuario_id" not in session or session.get("rol") not in ["medico", "admin"]:
+        flash("❌ Acceso denegado. Solo personal autorizado (Médico/Admin) puede eliminar documentos.", "error")
+        # Redirige a la página de inicio de sesión o al panel principal.
+        return redirect(url_for("sesion")) # O 'panel_medico' si ya está logueado.
+    # 🚨 FIN DE VERIFICACIÓN DE ROL 🚨
+
+    connection = get_connection()
+    archivo_a_borrar = None
+    
+    try:
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            # 1. Buscar el nombre del archivo antes de eliminar el registro
+            cursor.execute("SELECT archivo FROM documentos_medicos WHERE id = %s", (id,))
+            resultado = cursor.fetchone()
+            
+            if resultado:
+                archivo_a_borrar = resultado.get("archivo")
+                
+                # 2. Eliminar el registro de la Base de Datos
+                cursor.execute("DELETE FROM documentos_medicos WHERE id = %s", (id,))
+                connection.commit()
+                
+                # 3. Eliminar el archivo físico (Si se encontró un nombre de archivo)
+                if archivo_a_borrar:
+                    # Construir la ruta completa al archivo
+                    # app.config['UPLOAD_FOLDER'] debe estar definido
+                    file_path = os.path.join(app.config['UPLOAD_FOLDER'], archivo_a_borrar) 
+                    
+                    if os.path.exists(file_path):
+                        os.remove(file_path)
+                        flash(f"✅ Documento ID {id} y archivo '{archivo_a_borrar}' eliminados.", "success")
+                    else:
+                        flash(f"⚠️ Documento eliminado de DB, pero el archivo '{archivo_a_borrar}' no fue encontrado en el servidor.", "error")
+            else:
+                flash(f"❌ Error: Documento con ID {id} no encontrado en la base de datos.", "error")
+
+    except Exception as e:
+        print("Error al eliminar documento:", e)
+        flash(f"❌ Error interno al eliminar el documento: {e}", "error")
+        connection.rollback()
+    finally:
+        connection.close()
+
+    # Redirigir de vuelta a la página desde donde vino la solicitud
+    return redirect(request.referrer or url_for("documentos_paciente"))
 
 
 
@@ -1548,7 +1658,16 @@ def eliminar_medicamento(med_id):
         return jsonify({"success": False, "error": str(e)})
 
 
+@app.route('/terminos-y-condiciones')
+def terminos_condiciones():
+    """Renderiza la página de Términos y Condiciones."""
+    
+    return render_template('terminos-y-condiciones.html')
 
+@app.route('/politica-de-privacidad')
+def politica_privacidad():
+    """Renderiza el archivo HTML de Política de Privacidad."""
+    return render_template('politica-de-privacidad.html')
 
 # --- CHATBOT ---
 @app.route("/chat", methods=["POST"])

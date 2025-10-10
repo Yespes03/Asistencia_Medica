@@ -69,7 +69,8 @@
       100% { transform: translateX(-60px); }
     }
 
-    .header-content {
+    /* Base Mobile Layout (Centrado) */
+    .header-layout {
       position: relative;
       z-index: 1;
       padding: 2rem 2rem 2.5rem;
@@ -88,6 +89,27 @@
       color: rgba(255,255,255,0.9);
       font-size: 1rem;
       font-weight: 400;
+    }
+    
+    /* Estilos del botón de Cerrar Sesión */
+    .btn-logout {
+      background: var(--danger-color); /* Rojo */
+      color: white; 
+      padding: 0.6rem 1rem; 
+      border-radius: var(--radius-md); 
+      font-size: 0.9rem; 
+      font-weight: 600; 
+      text-decoration: none; 
+      display: inline-flex; 
+      align-items: center; 
+      gap: 0.4rem;
+      margin-top: 1.5rem; /* Espacio para separar del título en móvil */
+      box-shadow: var(--shadow-sm);
+      transition: background-color 0.2s;
+    }
+    
+    .btn-logout:hover {
+        background: #cc3333;
     }
 
     .container {
@@ -209,21 +231,32 @@
       text-align: center;
       margin-top: 2rem;
     }
+    
+    /* Media Query para Escritorio y Tablet */
+    @media (min-width: 768px) {
+        .header-layout {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left; /* Alinea el texto a la izquierda en escritorio */
+        }
+        
+        .header-logout-button .btn-logout {
+            margin-top: 0; /* Elimina el margen extra en escritorio */
+        }
+    }
   </style>
   <link rel="icon" type="image/png" href="{{ url_for('static', filename='zz.png') }}">
 </head>
 <body>
   <header class="header">
-    <div class="header-content" style="display: flex; justify-content: space-between; align-items: center;">
-      <div style="text-align: left;">
+    <div class="header-content header-layout">
+      <div class="header-title-group">
         <h1><i class="fas fa-tools"></i> Panel de Administración</h1>
-        <p class="header-subtitle">Bienvenido, {{ session['user_name'] }}</p>
+        <p class="header-subtitle">Bienvenido, Administrador del Sistema</p>
       </div>
-      <div>
-        <a href="{{ url_for('logout') }}" 
-           style="background: #ef4444; color: white; padding: 0.6rem 1rem; border-radius: 8px; 
-                  font-size: 0.9rem; font-weight: 600; text-decoration: none; display: inline-flex; 
-                  align-items: center; gap: 0.4rem;">
+      <div class="header-logout-button">
+        <a href="{{ url_for('logout') }}" class="btn-logout">
           <i class="fas fa-sign-out-alt"></i> Cerrar sesión
         </a>
       </div>

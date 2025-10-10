@@ -107,6 +107,7 @@
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
+            /* SVG para la flecha del select */
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%236b7280'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 0.75rem center;
@@ -117,13 +118,16 @@
         /* Estilos de los botones */
         .btn-container {
             display: flex;
-            justify-content: space-between;
+            /* 💡 CAMBIO: Justify-content: flex-end para poner el botón principal a la derecha */
+            justify-content: flex-end; 
             gap: 1rem;
             margin-top: 1.5rem;
         }
         
         .btn-submit, .btn-back {
-            flex: 1;
+            /* 💡 CAMBIO: Se ajusta el flex para que solo el botón de agregar tome el tamaño completo en móvil */
+            flex: 1; /* Por defecto ocupa todo el ancho en móvil */
+            max-width: 100%; /* Asegura que no se estire de más */
             padding: 1rem 1.5rem;
             border-radius: 8px;
             font-size: 1.1rem;
@@ -134,26 +138,48 @@
             justify-content: center;
             gap: 0.75rem;
             text-decoration: none;
-            color: white; /* Asegurar texto blanco para ambos */
+            color: white; 
             border: none;
         }
-
+        
+        @media (min-width: 600px) {
+            .btn-submit, .btn-back {
+                flex: none; /* Desactiva el flex en desktop */
+                max-width: 50%; /* Opcional: limitar un poco el ancho en desktop */
+            }
+            .btn-container {
+                justify-content: flex-end; /* Alinea los botones a la derecha en desktop */
+            }
+            /* 💡 CAMBIO: Ajuste para que los botones tengan un ancho más parejo en desktop */
+            .btn-back {
+                max-width: 150px; 
+            }
+            .btn-submit {
+                max-width: 250px;
+            }
+            .btn-container {
+                /* Asegura que el botón de volver esté primero en el orden visual */
+                flex-direction: row-reverse; 
+                justify-content: flex-end;
+            }
+        }
+        
         .btn-submit {
-            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); /* Mismo degradado azul principal */
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); 
         }
 
         .btn-submit:hover {
-            background: linear-gradient(135deg, #1a368b 0%, #3068cc 100%); /* Degradado un poco más oscuro al pasar el ratón */
+            background: linear-gradient(135deg, #1a368b 0%, #3068cc 100%); 
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra al hacer hover */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
         }
 
         .btn-back {
-            background: linear-gradient(135deg, #4b5563 0%, #6b7280 100%); /* Degradado gris-azul para volver */
+            background: linear-gradient(135deg, #4b5563 0%, #6b7280 100%); 
         }
 
         .btn-back:hover {
-            background: linear-gradient(135deg, #374151 0%, #4b5563 100%); /* Degradado gris-azul más oscuro */
+            background: linear-gradient(135deg, #374151 0%, #4b5563 100%); 
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
@@ -210,7 +236,12 @@
                     </div>
                     <div class="form-group">
                         <label for="tipo_documento"><i class="fas fa-id-card"></i> Tipo de Documento</label>
-                        <input type="text" name="tipo_documento" id="tipo_documento" class="form-control" required>
+                        <select name="tipo_documento" id="tipo_documento" class="form-select" required>
+                            <option value="">-- Seleccione --</option>
+                            <option value="cc">Cédula de Ciudadanía (cc)</option>
+                            <option value="ti">Tarjeta de Identidad (ti)</option>
+                            
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="documento"><i class="fas fa-hashtag"></i> Número de Documento</label>
@@ -273,7 +304,7 @@
                 </div>
 
                 <div class="btn-container">
-                    <a href="{{ url_for('gestion_medicos') }}" class="btn-submit">
+                    <a href="{{ url_for('gestion_medicos') }}" class="btn-back">
                         <i class="fas fa-arrow-left"></i> Volver
                     </a>
                     <button type="submit" class="btn-submit">

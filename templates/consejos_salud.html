@@ -502,6 +502,72 @@
             opacity: 0.8;
         }
 
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 25px;
+            max-width: 700px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            text-align: left;
+            line-height: 1.6;
+            overflow-y: auto;
+            max-height: 80vh;
+            border-top: 8px solid var(--accent-gold);
+        }
+
+        .modal-content h2 {
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .modal-buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .modal-buttons button {
+            margin: 0 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s ease;
+        }
+
+        .btn-aceptar {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+
+        .btn-aceptar:hover {
+            background-color: #0366c2;
+        }
+
+        .btn-cancelar {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .btn-cancelar:hover {
+            background-color: #c0392b;
+        }
+
         @media (max-width: 768px) {
             .container {
                 margin: 10px;
@@ -873,7 +939,59 @@
         </main>
     </div>
 
+
+<div id="disclaimer-modal" class="modal">
+  <div class="modal-content">
+    
+    <h2>⚠️ Descargo de Responsabilidad Médico y de RCP</h2>
+    
+    <p><strong>Importante:</strong> La información proporcionada en esta página web sobre Reanimación Cardiopulmonar (RCP), primeros auxilios, consejos y temas de salud general tiene únicamente fines informativos y educativos.</p>
+    
+    <p><strong>No Sustituye el Asesoramiento Médico Profesional:</strong> El contenido de esta web no debe ser considerado ni utilizado como un sustituto del diagnóstico, tratamiento, asesoramiento o la atención médica profesional por parte de un médico, enfermero o cualquier otro profesional de la salud calificado. Siempre consulta a un profesional de la salud calificado si tienes alguna pregunta sobre una condición médica o antes de comenzar cualquier nuevo tratamiento de salud.</p>
+    
+    <p><strong>Actúa Bajo tu Propia Responsabilidad:</strong> La aplicación de las técnicas de RCP y primeros auxilios descritas aquí se realiza bajo la exclusiva responsabilidad del usuario. No nos hacemos responsables de las lesiones, daños o resultados adversos que puedan surgir de la interpretación o aplicación de la información presentada.</p>
+    
+    <p><strong>Capacitación Formal:</strong> Recomendamos encarecidamente que, para estar debidamente preparado, obtengas una certificación formal y práctica de RCP y primeros auxilios a través de una organización reconocida. Las habilidades de salvamento requieren entrenamiento práctico.</p>
+    
+    <p><strong>En Caso de Emergencia:</strong> Si crees que tú o alguien más está experimentando una emergencia médica, llama inmediatamente al número local de emergencias (ej: 112, 911, etc.) o acude al centro de atención médica más cercano. Nunca ignores el consejo médico profesional ni demores la búsqueda de tratamiento debido a algo que hayas leído en esta web.</p>
+
+    <hr>
+    
+    <p><strong>Declaración de Consentimiento Obligatorio:</strong></p>
+    <p>Al hacer clic en <strong>"Aceptar"</strong>, usted confirma que ha leído, entendido y aceptado este Descargo de Responsabilidad, así como los <a href="/terminos-y-condiciones" target="_blank">Términos y Condiciones de Uso</a> y la <a href="/politica-de-privacidad" target="_blank">Política de Privacidad</a> de este sitio web.</p>
+    
+    <p class="advertencia"><strong>Si no acepta estos términos, por favor haga clic en "Cancelar" y abandone esta sección de la web.</strong></p>
+    
+    <div class="modal-buttons">
+      <button id="aceptar-btn" class="btn-aceptar">Aceptar</button>
+      <button id="cancelar-btn" class="btn-cancelar">Cancelar</button>
+    </div>
+    
+  </div>
+</div>
+
+
+
     <script>
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (!sessionStorage.getItem("disclaimerAceptado")) {
+    const modal = document.getElementById("disclaimer-modal");
+    modal.style.display = "flex";
+
+    document.getElementById("aceptar-btn").addEventListener("click", () => {
+      sessionStorage.setItem("disclaimerAceptado", "true");
+      modal.style.display = "none";
+    });
+
+    document.getElementById("cancelar-btn").addEventListener("click", () => {
+      alert("Debes aceptar el descargo para acceder a esta información.");
+      window.location.href = "/"; // Redirige a la página principal
+    });
+  }
+});
+
+
         function showSection(sectionId) {
             const sections = document.querySelectorAll('.section');
             sections.forEach(section => {

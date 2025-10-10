@@ -74,8 +74,12 @@
         }
 
         @media (max-width: 768px) {
+           @media (max-width: 768px) {
             nav {
-                justify-content: flex-end;
+                justify-content: flex-start; 
+                
+            }
+
             }
 
             .menu-toggle {
@@ -191,23 +195,23 @@
             box-shadow: 0 15px 30px rgba(0,0,0,0.2);
         }
 
-        /* Ajustes de espaciado y tamaño de fuente */
+        
         .card-icon {
             font-size: 45px;
             color: #DDBB87;
-            margin-bottom: -10px; /* Reducción de 12px a 5px para acercar al título */
+            margin-bottom: -10px; /
         }
 
         .card h3 {
             font-size: 20px;
-            margin-bottom: -10px; /* Reducción de 8px a 5px para acercar al párrafo */
+            margin-bottom: -10px; 
             font-weight: bold;
         }
 
         .card p {
             font-size: 15px;
             color: #383737;
-            line-height: 1.2; /* Reducción del interlineado para un texto más compacto */
+            line-height: 1.2; 
         }
         
         .card-wave {
@@ -377,7 +381,7 @@
             </a>
 
             {% if user_name %}
-            <a href="/notificaciones" class="card">
+            <a href="/recordatorio" class="card">
             {% else %}
             <a href="#" onclick="mostrarAlerta('Debes iniciar sesión para ver notificaciones')" class="card">
             {% endif %}
