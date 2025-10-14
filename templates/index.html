@@ -1211,15 +1211,22 @@
   });
 
  // Mantener tu función sendMessage intacta
+// CÓDIGO A MODIFICAR EN TU ETIQUETA <script>
+
   async function sendMessage() {
     const input = document.getElementById('userInput');
     const chat = document.getElementById('chat');
     const userText = input.value;
-  const res = await fetch('https://medica-gfya.onrender.com/chat', {
-  method: 'POST',
-  headers: {'Content-Type': 'application/json'},
-  body: JSON.stringify({ message: userText })
-});
+  
+    // ******************************************************
+    // *** CAMBIA ESTA LÍNEA DE RENDER A LOCAL ***
+    // ******************************************************
+    const res = await fetch('https://asistencia-medica.onrender.com/chat', { 
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ message: userText })
+    });
+    
     const data = await res.json();
     chat.innerHTML += '<p><strong>Bot:</strong> ' + data.reply + '</p>';
     input.value = '';
